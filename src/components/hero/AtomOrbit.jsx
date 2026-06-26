@@ -1,15 +1,15 @@
-import OrbitBadge from './OrbitBadge'
+import OrbitBadge from "./OrbitBadge";
 
-const SEMI_MAJOR = 340
-const SEMI_MINOR = 78
-const RING_1 = 30
-const RING_2 = -30
-const SVG_SIZE = (SEMI_MAJOR + 80) * 2
+const SEMI_MAJOR = 340;
+const SEMI_MINOR = 78;
+const RING_1 = 30;
+const RING_2 = -30;
+const SVG_SIZE = (SEMI_MAJOR + 80) * 2;
 
 const OrbitRing = ({ angle, color }) => {
-  const r = parseInt(color.slice(1, 3), 16)
-  const g = parseInt(color.slice(3, 5), 16)
-  const b = parseInt(color.slice(5, 7), 16)
+  const r = parseInt(color.slice(1, 3), 16);
+  const g = parseInt(color.slice(3, 5), 16);
+  const b = parseInt(color.slice(5, 7), 16);
   return (
     <ellipse
       cx={SVG_SIZE / 2}
@@ -22,22 +22,30 @@ const OrbitRing = ({ angle, color }) => {
       fill="none"
       strokeDasharray="5 9"
     />
-  )
-}
+  );
+};
 
-const AtomOrbit = ({ centerY = '42%' }) => (
-  <div style={{ position: 'absolute', top: centerY, left: '50%', width: 0, height: 0 }}>
+const AtomOrbit = ({ centerY = "42%" }) => (
+  <div
+    style={{
+      position: "absolute",
+      top: centerY,
+      left: "50%",
+      width: 0,
+      height: 0,
+    }}
+  >
     <svg
       style={{
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
-        transform: 'translate(-50%, -50%)',
+        transform: "translate(-50%, -50%)",
         width: SVG_SIZE,
         height: SVG_SIZE,
         zIndex: 5,
-        pointerEvents: 'none',
-        overflow: 'visible',
+        pointerEvents: "none",
+        overflow: "visible",
       }}
     >
       <OrbitRing angle={RING_1} color="#39FF14" />
@@ -63,6 +71,6 @@ const AtomOrbit = ({ centerY = '42%' }) => (
       color="#00FFCC"
     />
   </div>
-)
+);
 
-export default AtomOrbit
+export default AtomOrbit;
