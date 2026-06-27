@@ -16,17 +16,11 @@ const LayoutC = () => {
   const stroke = isMobile ? "1.5px" : "2.5px";
 
   return (
-    /*
-      overflow-hidden is intentionally removed from the section —
-      it was clipping orbit badges at the edges.
-      Image crop is handled by its own inner overflow:hidden wrapper.
-      overflowX: hidden on the section prevents horizontal scrollbars only.
-    */
     <section
       className="relative min-h-screen flex items-center justify-center"
       style={{ overflowX: "hidden" }}
     >
-      {/* ── Layer 1: solid text — centered, behind image ── */}
+      {/* ── Layer 1: solid text — behind image ── */}
       <div
         className="absolute inset-0 flex flex-col justify-center px-[4vw] pointer-events-none"
         style={{ zIndex: 2 }}
@@ -50,7 +44,7 @@ const LayoutC = () => {
         </motion.h1>
       </div>
 
-      {/* ── Layer 2: image ── */}
+      {/* ── Layer 2: image — scale fade-in entrance ── */}
       <div
         style={{
           position: "absolute",
@@ -63,9 +57,12 @@ const LayoutC = () => {
           zIndex: 10,
         }}
       >
-        <img
+        <motion.img
           src="/me/profile.png"
           alt="Adebowale Adeniran"
+          initial={{ opacity: 0, scale: 1.08 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
           style={{
             width: "100%",
             height: "100%",
@@ -83,21 +80,13 @@ const LayoutC = () => {
         label="Backend Developer"
         color="#39FF14"
         delay={0}
-        style={
-          isMobile
-            ? { left: "4vw", top: "14vh" }
-            : { left: "13vw", top: "22vh" }
-        }
+        style={isMobile ? { left: "4vw", top: "14vh" } : { left: "13vw", top: "22vh" }}
       />
       <FloatingBadge
         label="Full-Stack"
         color="#00FFCC"
         delay={1.4}
-        style={
-          isMobile
-            ? { right: "4vw", bottom: "25vh" }
-            : { right: "13vw", bottom: "22vh" }
-        }
+        style={isMobile ? { right: "4vw", bottom: "25vh" } : { right: "13vw", bottom: "22vh" }}
       />
 
       {/* ── Layer 3: hollow outline text ── */}
@@ -133,7 +122,7 @@ const LayoutC = () => {
         </h1>
       </div>
 
-      {/* ── Bottom gradient — ensures bio is readable over the image ── */}
+      {/* ── Bottom gradient ── */}
       <div
         style={{
           position: "absolute",
@@ -141,8 +130,7 @@ const LayoutC = () => {
           left: 0,
           right: 0,
           height: "160px",
-          background:
-            "linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%)",
+          background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%)",
           zIndex: 18,
           pointerEvents: "none",
         }}
@@ -166,14 +154,7 @@ const LayoutC = () => {
           }}
         >
           <div style={{ width: "28px", height: "1px", background: "#39FF14" }} />
-          <div
-            style={{
-              width: "6px",
-              height: "6px",
-              borderRadius: "50%",
-              background: "#39FF14",
-            }}
-          />
+          <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#39FF14" }} />
           <div style={{ width: "28px", height: "1px", background: "#39FF14" }} />
         </div>
         <p

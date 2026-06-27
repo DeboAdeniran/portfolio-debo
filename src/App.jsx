@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { ArrowUpRight, Menu, X } from 'lucide-react'
 import './index.css'
 import Logo from './components/logo/Logo'
 import HeroSection from './components/hero/HeroSection'
+import AboutSection from './components/about/AboutSection'
 import useIsMobile from './hooks/useIsMobile'
 
 const NAV_ITEMS = ['home', 'about', 'skills', 'portfolio', 'articles']
@@ -73,7 +75,7 @@ const App = () => {
               gap: '4px',
             }}
           >
-            talk to me <span style={{ fontSize: '1rem' }}>↗</span>
+            talk to me <ArrowUpRight size={14} strokeWidth={1.5} />
           </a>
         )}
 
@@ -87,29 +89,13 @@ const App = () => {
               border: 'none',
               cursor: 'pointer',
               padding: '4px',
+              color: menuOpen ? '#39FF14' : '#f0f0f0',
+              transition: 'color 0.2s ease',
               display: 'flex',
-              flexDirection: 'column',
-              gap: '5px',
+              alignItems: 'center',
             }}
           >
-            <span style={{
-              display: 'block', width: '22px', height: '1.5px',
-              background: menuOpen ? '#39FF14' : '#f0f0f0',
-              transition: 'all 0.2s ease',
-              transform: menuOpen ? 'translateY(6.5px) rotate(45deg)' : 'none',
-            }} />
-            <span style={{
-              display: 'block', width: '22px', height: '1.5px',
-              background: menuOpen ? '#39FF14' : '#f0f0f0',
-              transition: 'all 0.2s ease',
-              opacity: menuOpen ? 0 : 1,
-            }} />
-            <span style={{
-              display: 'block', width: '22px', height: '1.5px',
-              background: menuOpen ? '#39FF14' : '#f0f0f0',
-              transition: 'all 0.2s ease',
-              transform: menuOpen ? 'translateY(-6.5px) rotate(-45deg)' : 'none',
-            }} />
+            {menuOpen ? <X size={22} strokeWidth={1.5} /> : <Menu size={22} strokeWidth={1.5} />}
           </button>
         )}
       </header>
@@ -164,13 +150,14 @@ const App = () => {
               marginTop: '0.5rem',
             }}
           >
-            talk to me ↗
+            talk to me <ArrowUpRight size={14} strokeWidth={1.5} />
           </a>
         </div>
       )}
 
       <main>
         <HeroSection />
+        <AboutSection />
       </main>
     </div>
   )
