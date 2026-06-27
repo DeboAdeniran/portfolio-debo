@@ -53,7 +53,7 @@ const JavaBlock = () => (
         <></>,
         <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="name" />      <PUN c="=" /> <PUN c='"'/><STR c="Adebowale Adeniran" /><PUN c='"' /><PUN c=";" /></>,
         <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="location" />  <PUN c="=" /> <PUN c='"'/><STR c="Nigeria" /><PUN c='"' /><PUN c=";" /></>,
-        <>{sp()}<KW c="private" /> <KW c="int" />      <FN c="years" />      <PUN c="=" /> <NUM c="9" /><PUN c=";" /></>,
+        <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="years" />      <PUN c="=" /> <PUN c='"'/><STR c="5+" /><PUN c='"' /><PUN c=";" /></>,
         <>{sp()}<KW c="private" /> <KW c="boolean" />  <FN c="available" /> <PUN c="=" /> <NUM c="true" /><PUN c=";" /></>,
         <></>,
         <>{sp()}<ANN c="@Override" /></>,
@@ -121,17 +121,6 @@ const AboutSection = () => {
         {/* ── Left: text ── */}
         <div>
           <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
-            <div style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: '0.78rem',
-              letterSpacing: '0.12em',
-              color: '#39FF14',
-              textTransform: 'uppercase',
-              marginBottom: '20px',
-            }}>
-              // about
-            </div>
-
             <h2 style={{
               fontFamily: "'Clash Display', sans-serif",
               fontWeight: 700,
@@ -141,8 +130,8 @@ const AboutSection = () => {
               letterSpacing: '-0.01em',
               marginBottom: '32px',
             }}>
-              Almost a decade of building things that{' '}
-              <span style={{ color: '#39FF14' }}>work.</span>
+              Who is{' '}
+              <span style={{ color: '#39FF14' }}>Debo?</span>
             </h2>
           </motion.div>
 
@@ -154,9 +143,8 @@ const AboutSection = () => {
               lineHeight: 1.8,
               marginBottom: '20px',
             }}>
-              I'm a Full-Stack Developer based in Nigeria with close to a decade of
-              experience building scalable products from architecture to deployment,
-              front to back.
+              Debo Adeniran is a Full-Stack Developer based in Nigeria with 5+ years of experience,
+              building scalable products from architecture to deployment, front to back.
             </p>
 
             <p style={{
