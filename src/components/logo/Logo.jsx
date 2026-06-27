@@ -1,4 +1,4 @@
-import LogoMark from './LogoMark'
+import LogoMark from './LogoVariants'
 
 const Logo = () => <LogoMark size={36} />
 
