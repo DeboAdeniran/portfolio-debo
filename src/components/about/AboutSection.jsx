@@ -53,7 +53,7 @@ const JavaBlock = () => (
         <></>,
         <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="name" />      <PUN c="=" /> <PUN c='"'/><STR c="Adebowale Adeniran" /><PUN c='"' /><PUN c=";" /></>,
         <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="location" />  <PUN c="=" /> <PUN c='"'/><STR c="Nigeria" /><PUN c='"' /><PUN c=";" /></>,
-        <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="years" />      <PUN c="=" /> <PUN c='"'/><STR c="5+" /><PUN c='"' /><PUN c=";" /></>,
+        <>{sp()}<KW c="private" /> <KW c="int" />     <FN c="years" />      <PUN c="=" /> <NUM c="4" /><PUN c=";" /></>,
         <>{sp()}<KW c="private" /> <KW c="boolean" />  <FN c="available" /> <PUN c="=" /> <NUM c="true" /><PUN c=";" /></>,
         <></>,
         <>{sp()}<ANN c="@Override" /></>,
@@ -143,8 +143,8 @@ const AboutSection = () => {
               lineHeight: 1.8,
               marginBottom: '20px',
             }}>
-              Debo Adeniran is a Full-Stack Developer based in Nigeria with 5+ years of experience,
-              building scalable products from architecture to deployment, front to back.
+              Debo Adeniran is a Full-Stack Developer based in Nigeria, building scalable products
+              from architecture to deployment, front to back. Building since 2022.
             </p>
 
             <p style={{

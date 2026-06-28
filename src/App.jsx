@@ -5,6 +5,8 @@ import Logo from './components/logo/Logo'
 import HeroSection from './components/hero/HeroSection'
 import AboutSection from './components/about/AboutSection'
 import SkillsSection from './components/skills/SkillsSection'
+import ExperienceSection from './components/experience/ExperienceSection'
+import PortfolioPreview from './components/portfolio/PortfolioPreview'
 import useIsMobile from './hooks/useIsMobile'
 
 const NAV_ITEMS = ['home', 'about', 'skills', 'portfolio', 'articles']
@@ -160,6 +162,8 @@ const App = () => {
         <HeroSection />
         <AboutSection />
         <SkillsSection />
+        <ExperienceSection />
+        <PortfolioPreview />
       </main>
     </div>
   )
