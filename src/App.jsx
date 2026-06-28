@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import './index.css'
 import Logo from './components/logo/Logo'
@@ -7,6 +8,10 @@ import AboutSection from './components/about/AboutSection'
 import SkillsSection from './components/skills/SkillsSection'
 import ExperienceSection from './components/experience/ExperienceSection'
 import PortfolioPreview from './components/portfolio/PortfolioPreview'
+import ContactSection from './components/contact/ContactSection'
+import Footer from './components/footer/Footer'
+import TermsPage from './pages/TermsPage'
+import PrivacyPage from './pages/PrivacyPage'
 import useIsMobile from './hooks/useIsMobile'
 
 const NAV_ITEMS = ['home', 'about', 'skills', 'portfolio', 'articles']
@@ -19,12 +24,22 @@ const NAV_LINK_STYLE = {
   transition: 'color 0.2s ease',
 }
 
-const App = () => {
+const Navbar = () => {
   const isMobile = useIsMobile()
   const [menuOpen, setMenuOpen] = useState(false)
+  const navigate = useNavigate()
+
+  const goHome = (hash) => {
+    navigate('/')
+    setTimeout(() => {
+      const el = document.getElementById(hash.replace('#', ''))
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    }, 50)
+    setMenuOpen(false)
+  }
 
   return (
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
+    <>
       <header
         style={{
           position: 'fixed',
@@ -42,47 +57,60 @@ const App = () => {
           borderBottom: '1px solid rgba(255,255,255,0.04)',
         }}
       >
-        <Logo />
+        <button
+          onClick={() => goHome('home')}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+        >
+          <Logo />
+        </button>
 
-        {/* ── Desktop nav ── */}
+        {/* Desktop nav */}
         {!isMobile && (
           <nav style={{ display: 'flex', gap: '2.5rem' }}>
             {NAV_ITEMS.map((item) => (
-              <a
+              <button
                 key={item}
-                href={`#${item}`}
+                onClick={() => goHome(item)}
                 style={{
                   ...NAV_LINK_STYLE,
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
                   color: item === 'home' ? '#f0f0f0' : '#6b7280',
+                  padding: 0,
                 }}
-                onMouseEnter={(e) => (e.target.style.color = '#f0f0f0')}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#f0f0f0')}
                 onMouseLeave={(e) =>
-                  (e.target.style.color = item === 'home' ? '#f0f0f0' : '#6b7280')
+                  (e.currentTarget.style.color = item === 'home' ? '#f0f0f0' : '#6b7280')
                 }
               >
                 {item}
-              </a>
+              </button>
             ))}
           </nav>
         )}
 
-        {/* ── Desktop CTA ── */}
+        {/* Desktop CTA */}
         {!isMobile && (
-          <a
-            href="#contact"
+          <button
+            onClick={() => goHome('contact')}
             style={{
               ...NAV_LINK_STYLE,
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
               color: '#f0f0f0',
               display: 'flex',
               alignItems: 'center',
               gap: '4px',
+              padding: 0,
             }}
           >
             talk to me <ArrowUpRight size={14} strokeWidth={1.5} />
-          </a>
+          </button>
         )}
 
-        {/* ── Mobile hamburger ── */}
+        {/* Mobile hamburger */}
         {isMobile && (
           <button
             onClick={() => setMenuOpen((o) => !o)}
@@ -103,7 +131,7 @@ const App = () => {
         )}
       </header>
 
-      {/* ── Mobile full-screen menu overlay ── */}
+      {/* Mobile overlay */}
       {isMobile && (
         <div
           style={{
@@ -124,11 +152,13 @@ const App = () => {
           }}
         >
           {NAV_ITEMS.map((item) => (
-            <a
+            <button
               key={item}
-              href={`#${item}`}
-              onClick={() => setMenuOpen(false)}
+              onClick={() => goHome(item)}
               style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
                 color: '#f0f0f0',
                 textDecoration: 'none',
                 fontSize: '2rem',
@@ -137,36 +167,60 @@ const App = () => {
                 letterSpacing: '0.04em',
                 transition: 'color 0.2s',
               }}
-              onMouseEnter={(e) => (e.target.style.color = '#39FF14')}
-              onMouseLeave={(e) => (e.target.style.color = '#f0f0f0')}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#39FF14')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = '#f0f0f0')}
             >
               {item}
-            </a>
+            </button>
           ))}
-          <a
-            href="#contact"
-            onClick={() => setMenuOpen(false)}
+          <button
+            onClick={() => goHome('contact')}
             style={{
               ...NAV_LINK_STYLE,
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
               color: '#39FF14',
               fontSize: '0.95rem',
               marginTop: '0.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
             }}
           >
             talk to me <ArrowUpRight size={14} strokeWidth={1.5} />
-          </a>
+          </button>
         </div>
       )}
-
-      <main>
-        <HeroSection />
-        <AboutSection />
-        <SkillsSection />
-        <ExperienceSection />
-        <PortfolioPreview />
-      </main>
-    </div>
+    </>
   )
 }
+
+const HomePage = () => (
+  <main>
+    <HeroSection />
+    <AboutSection />
+    <SkillsSection />
+    <ExperienceSection />
+    <PortfolioPreview />
+    <ContactSection />
+  </main>
+)
+
+const App = () => (
+  <BrowserRouter>
+    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Navbar />
+      <div style={{ flex: 1 }}>
+        <Routes>
+          <Route path="/"               element={<HomePage />} />
+          <Route path="/terms"          element={<TermsPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPage />} />
+        </Routes>
+      </div>
+      <Footer />
+    </div>
+  </BrowserRouter>
+)
 
 export default App

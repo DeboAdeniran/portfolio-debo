@@ -244,34 +244,88 @@ const PortfolioPreview = () => {
           transition={{ duration: 0.6 }}
           style={{ marginBottom: '56px' }}
         >
-          <h2 style={{
-            fontFamily: "'Clash Display', sans-serif",
-            fontWeight: 700,
-            fontSize: 'clamp(1.8rem, 3vw, 2.8rem)',
-            color: '#ffffff',
-            letterSpacing: '-0.01em',
-            marginBottom: '10px',
-          }}>
-            Selected <span style={{ color: '#39FF14' }}>Work</span>
-          </h2>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: '0.9rem',
-            color: '#6b7280',
-          }}>
-            A few things I have shipped
-          </p>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+            <div>
+              <h2 style={{
+                fontFamily: "'Clash Display', sans-serif",
+                fontWeight: 700,
+                fontSize: 'clamp(1.8rem, 3vw, 2.8rem)',
+                color: '#ffffff',
+                letterSpacing: '-0.01em',
+                marginBottom: '10px',
+              }}>
+                Selected <span style={{ color: '#39FF14' }}>Work</span>
+              </h2>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '0.9rem',
+                color: '#6b7280',
+              }}>
+                A few things I have shipped
+              </p>
+            </div>
+
+            {/* Mobile swipe hint */}
+            {isMobile && (
+              <motion.p
+                initial={{ opacity: 0, x: 10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: '0.72rem',
+                  color: '#39FF14',
+                  letterSpacing: '0.06em',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                slide to explore &rarr;
+              </motion.p>
+            )}
+          </div>
         </motion.div>
 
+        {/* Desktop: grid — Mobile: horizontal scroll */}
+        {isMobile ? (
+          <div
+            className="hide-scrollbar"
+            style={{
+              display: 'flex',
+              gap: '16px',
+              overflowX: 'auto',
+              paddingBottom: '12px',
+              scrollSnapType: 'x mandatory',
+              WebkitOverflowScrolling: 'touch',
+              msOverflowStyle: 'none',
+              scrollbarWidth: 'none',
+            }}
+          >
+            {PROJECTS.map((project, i) => (
+              <div
+                key={project.id}
+                style={{
+                  flex: '0 0 78vw',
+                  scrollSnapAlign: 'start',
+                }}
+              >
+                <ProjectCard project={project} index={i} />
+              </div>
+            ))}
+          </div>
+        ) : (
         <div style={{
           display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+          gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '20px',
         }}>
           {PROJECTS.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />
           ))}
         </div>
+        )}
 
         <motion.div
           initial={{ opacity: 0 }}

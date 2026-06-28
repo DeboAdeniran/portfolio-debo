@@ -11,6 +11,10 @@
     scroll-behavior: smooth;
   }
 
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   html,
   body,
   #root {
