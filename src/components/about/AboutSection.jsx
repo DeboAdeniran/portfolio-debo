@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import useIsMobile from '../../hooks/useIsMobile'
 
 // ── Syntax token helpers ──
@@ -12,79 +13,187 @@ const NUM = ({ c }) => <span style={{ color: '#39FF14'  }}>{c}</span>   // numbe
 const FN  = ({ c }) => <span style={{ color: '#ffffff'  }}>{c}</span>   // method names
 const sp  = (n = 1) => ' '.repeat(n * 4)
 
-// ── Java Code Block ──
-const JavaBlock = () => (
-  <div style={{
-    background: '#0d0d12',
-    borderRadius: '12px',
-    border: '1px solid rgba(255,255,255,0.07)',
-    overflow: 'hidden',
-  }}>
-    {/* Title bar */}
-    <div style={{
-      display: 'flex', alignItems: 'center', gap: '6px',
-      padding: '12px 16px',
-      background: '#161620',
-      borderBottom: '1px solid rgba(255,255,255,0.05)',
-    }}>
-      {['#FF5F56', '#FFBD2E', '#27C93F'].map((c) => (
-        <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />
-      ))}
-      <span style={{
-        marginLeft: '8px', fontSize: '0.7rem', color: '#4b5563',
-        fontFamily: "'Courier New', monospace", letterSpacing: '0.06em',
-      }}>
-        Debo.java
-      </span>
-    </div>
+const TERM_LINES = [
+  { text: '$ javac Debo.java',                                          color: '#6b7280', delay: 0.05 },
+  { text: '$ java Debo',                                                color: '#6b7280', delay: 0.55 },
+  { text: '',                                                           color: '',        delay: 0.8  },
+  { text: 'Compiling Debo.java...',                                     color: '#9ca3af', delay: 1.0  },
+  { text: '  BUILD SUCCESS  (0.4s)',                                    color: '#39FF14', delay: 1.9  },
+  { text: '',                                                           color: '',        delay: 2.1  },
+  { text: 'Running Debo.main()...',                                     color: '#9ca3af', delay: 2.3  },
+  { text: '',                                                           color: '',        delay: 2.6  },
+  { text: '  stack      →  ["React", "Spring Boot", "Node.js", "PostgreSQL", "Redis", "MongoDB"]', color: '#00FFCC', delay: 2.8 },
+  { text: '  philosophy →  "Architecture first, code second."',         color: '#00FFCC', delay: 3.3  },
+  { text: '  available  →  true',                                       color: '#39FF14', delay: 3.7  },
+  { text: '  location   →  "Nigeria"',                                  color: '#00FFCC', delay: 4.0  },
+  { text: '',                                                           color: '',        delay: 4.3  },
+  { text: 'Process finished with exit code 0',                          color: '#4b5563', delay: 4.5  },
+]
 
-    {/* Code */}
+// ── Java Code Block ──
+const JavaBlock = () => {
+  const [runKey, setRunKey]         = useState(0)
+  const [showTerm, setShowTerm]     = useState(false)
+
+  const handleRun = () => {
+    setRunKey((k) => k + 1)
+    setShowTerm(true)
+  }
+
+  const handleReset = () => {
+    setShowTerm(false)
+  }
+
+  return (
     <div style={{
-      padding: '22px 28px',
-      fontFamily: "'Courier New', monospace",
-      fontSize: '0.78rem',
-      lineHeight: 2,
-      overflowX: 'auto',
+      background: '#0d0d12',
+      borderRadius: '12px',
+      border: '1px solid rgba(255,255,255,0.07)',
+      overflow: 'hidden',
     }}>
-      {[
-        <><CMT c="// Debo.java" /></>,
-        <></>,
-        <><KW c="public" /> <KW c="class" /> <CLS c="Debo" /> <KW c="extends" /> <CLS c="FullStackDeveloper" /> <PUN c="{" /></>,
-        <></>,
-        <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="name" />      <PUN c="=" /> <PUN c='"'/><STR c="Adebowale Adeniran" /><PUN c='"' /><PUN c=";" /></>,
-        <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="location" />  <PUN c="=" /> <PUN c='"'/><STR c="Nigeria" /><PUN c='"' /><PUN c=";" /></>,
-        <>{sp()}<KW c="private" /> <KW c="int" />     <FN c="years" />      <PUN c="=" /> <NUM c="4" /><PUN c=";" /></>,
-        <>{sp()}<KW c="private" /> <KW c="boolean" />  <FN c="available" /> <PUN c="=" /> <NUM c="true" /><PUN c=";" /></>,
-        <></>,
-        <>{sp()}<ANN c="@Override" /></>,
-        <>{sp()}<KW c="public" /> <CLS c="String" /><PUN c="[]" /> <FN c="stack" /><PUN c="() {" /></>,
-        <>{sp(2)}<KW c="return" /> <KW c="new" /> <CLS c="String" /><PUN c="[]{ " /><PUN c='"'/><STR c="React" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="Spring Boot" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="Node.js" /><PUN c='"' /><PUN c="," /></>,
-        <>{sp(3)}<PUN c='"'/><STR c="PostgreSQL" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="Redis" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="MongoDB" /><PUN c='"' /> <PUN c="};" /></>,
-        <>{sp()}<PUN c="}" /></>,
-        <></>,
-        <>{sp()}<KW c="public" /> <CLS c="String" /> <FN c="philosophy" /><PUN c="() {" /></>,
-        <>{sp(2)}<KW c="return" /> <PUN c='"'/><STR c="Architecture first, code second." /><PUN c='"' /><PUN c=";" /></>,
-        <>{sp()}<PUN c="}" /></>,
-        <></>,
-        <>{sp()}<KW c="public" /> <KW c="static" /> <KW c="void" /> <FN c="main" /><PUN c="(" /><CLS c="String" /><PUN c="[]" /> <FN c="args" /><PUN c=") {" /></>,
-        <>{sp(2)}<CLS c="Debo" /> <FN c="dev" /> <PUN c="=" /> <KW c="new" /> <CLS c="Debo" /><PUN c="();" /></>,
-        <>{sp(2)}<FN c="dev" /><PUN c="." /><FN c="stack" /><PUN c="();" /></>,
-        <>{sp(2)}<FN c="dev" /><PUN c="." /><FN c="philosophy" /><PUN c="();" /></>,
-        <>{sp()}<PUN c="}" /></>,
-        <><PUN c="}" /></>,
-      ].map((line, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: i * 0.03, duration: 0.15 }}
+      {/* Title bar */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: '6px',
+        padding: '12px 16px',
+        background: '#161620',
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
+      }}>
+        {['#FF5F56', '#FFBD2E', '#27C93F'].map((c) => (
+          <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />
+        ))}
+        <span style={{
+          marginLeft: '8px', fontSize: '0.7rem', color: '#4b5563',
+          fontFamily: "'Courier New', monospace", letterSpacing: '0.06em',
+          flex: 1,
+        }}>
+          Debo.java
+        </span>
+
+        {/* Run / Reset button */}
+        <button
+          onClick={showTerm ? handleReset : handleRun}
+          style={{
+            display: 'flex', alignItems: 'center', gap: '5px',
+            padding: '4px 12px',
+            borderRadius: '5px',
+            border: 'none',
+            cursor: 'pointer',
+            background: showTerm ? 'rgba(255,255,255,0.06)' : 'rgba(57,255,20,0.12)',
+            color: showTerm ? '#6b7280' : '#39FF14',
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: '0.7rem',
+            fontWeight: 600,
+            letterSpacing: '0.05em',
+            transition: 'all 0.2s',
+          }}
         >
-          {line}
-        </motion.div>
-      ))}
+          {showTerm ? (
+            <>
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M5 1a4 4 0 1 1-2.83 1.17M5 1V4M5 1 3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Reset
+            </>
+          ) : (
+            <>
+              <svg width="9" height="10" viewBox="0 0 9 10" fill="currentColor">
+                <path d="M1 1.5l7 3.5-7 3.5V1.5z"/>
+              </svg>
+              Run
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Code */}
+      <div style={{
+        padding: '22px 28px',
+        fontFamily: "'Courier New', monospace",
+        fontSize: '0.78rem',
+        lineHeight: 2,
+        overflowX: 'auto',
+      }}>
+        {[
+          <><CMT c="// Debo.java" /></>,
+          <></>,
+          <><KW c="public" /> <KW c="class" /> <CLS c="Debo" /> <KW c="extends" /> <CLS c="FullStackDeveloper" /> <PUN c="{" /></>,
+          <></>,
+          <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="name" />      <PUN c="=" /> <PUN c='"'/><STR c="Adebowale Adeniran" /><PUN c='"' /><PUN c=";" /></>,
+          <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="location" />  <PUN c="=" /> <PUN c='"'/><STR c="Nigeria" /><PUN c='"' /><PUN c=";" /></>,
+          <>{sp()}<KW c="private" /> <KW c="int" />     <FN c="years" />      <PUN c="=" /> <NUM c="4" /><PUN c=";" /></>,
+          <>{sp()}<KW c="private" /> <KW c="boolean" />  <FN c="available" /> <PUN c="=" /> <NUM c="true" /><PUN c=";" /></>,
+          <></>,
+          <>{sp()}<ANN c="@Override" /></>,
+          <>{sp()}<KW c="public" /> <CLS c="String" /><PUN c="[]" /> <FN c="stack" /><PUN c="() {" /></>,
+          <>{sp(2)}<KW c="return" /> <KW c="new" /> <CLS c="String" /><PUN c="[]{ " /><PUN c='"'/><STR c="React" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="Spring Boot" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="Node.js" /><PUN c='"' /><PUN c="," /></>,
+          <>{sp(3)}<PUN c='"'/><STR c="PostgreSQL" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="Redis" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="MongoDB" /><PUN c='"' /> <PUN c="};" /></>,
+          <>{sp()}<PUN c="}" /></>,
+          <></>,
+          <>{sp()}<KW c="public" /> <CLS c="String" /> <FN c="philosophy" /><PUN c="() {" /></>,
+          <>{sp(2)}<KW c="return" /> <PUN c='"'/><STR c="Architecture first, code second." /><PUN c='"' /><PUN c=";" /></>,
+          <>{sp()}<PUN c="}" /></>,
+          <></>,
+          <>{sp()}<KW c="public" /> <KW c="static" /> <KW c="void" /> <FN c="main" /><PUN c="(" /><CLS c="String" /><PUN c="[]" /> <FN c="args" /><PUN c=") {" /></>,
+          <>{sp(2)}<CLS c="Debo" /> <FN c="dev" /> <PUN c="=" /> <KW c="new" /> <CLS c="Debo" /><PUN c="();" /></>,
+          <>{sp(2)}<FN c="dev" /><PUN c="." /><FN c="stack" /><PUN c="();" /></>,
+          <>{sp(2)}<FN c="dev" /><PUN c="." /><FN c="philosophy" /><PUN c="();" /></>,
+          <>{sp()}<PUN c="}" /></>,
+          <><PUN c="}" /></>,
+        ].map((line, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: i * 0.03, duration: 0.15 }}
+          >
+            {line}
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Terminal output */}
+      <AnimatePresence>
+        {showTerm && (
+          <motion.div
+            key={runKey}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div style={{
+              borderTop: '1px solid rgba(255,255,255,0.05)',
+              background: '#080c08',
+              padding: '16px 28px 20px',
+              fontFamily: "'Courier New', monospace",
+              fontSize: '0.74rem',
+              lineHeight: 1.95,
+            }}>
+              <div style={{
+                fontSize: '0.62rem', color: '#374151', letterSpacing: '0.1em',
+                marginBottom: '10px', textTransform: 'uppercase',
+              }}>
+                Terminal
+              </div>
+              {TERM_LINES.map((line, i) => (
+                <motion.div
+                  key={`${runKey}-${i}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: line.delay, duration: 0.2 }}
+                  style={{ color: line.color || 'transparent', minHeight: '1.95em' }}
+                >
+                  {line.text}
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
-  </div>
-)
+  )
+}
 
 // ────────────────────────────────────────────
 // Main About Section
