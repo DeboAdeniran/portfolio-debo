@@ -13,35 +13,187 @@ const NUM = ({ c }) => <span style={{ color: '#39FF14'  }}>{c}</span>   // numbe
 const FN  = ({ c }) => <span style={{ color: '#ffffff'  }}>{c}</span>   // method names
 const sp  = (n = 1) => ' '.repeat(n * 4)
 
-const TERM_LINES = [
-  { text: '$ javac Debo.java',                                          color: '#6b7280', delay: 0.05 },
-  { text: '$ java Debo',                                                color: '#6b7280', delay: 0.55 },
-  { text: '',                                                           color: '',        delay: 0.8  },
-  { text: 'Compiling Debo.java...',                                     color: '#9ca3af', delay: 1.0  },
-  { text: '  BUILD SUCCESS  (0.4s)',                                    color: '#39FF14', delay: 1.9  },
-  { text: '',                                                           color: '',        delay: 2.1  },
-  { text: 'Running Debo.main()...',                                     color: '#9ca3af', delay: 2.3  },
-  { text: '',                                                           color: '',        delay: 2.6  },
-  { text: '  stack      →  ["React", "Spring Boot", "Node.js", "PostgreSQL", "Redis", "MongoDB"]', color: '#00FFCC', delay: 2.8 },
-  { text: '  philosophy →  "Architecture first, code second."',         color: '#00FFCC', delay: 3.3  },
-  { text: '  available  →  true',                                       color: '#39FF14', delay: 3.7  },
-  { text: '  location   →  "Nigeria"',                                  color: '#00FFCC', delay: 4.0  },
-  { text: '',                                                           color: '',        delay: 4.3  },
-  { text: 'Process finished with exit code 0',                          color: '#4b5563', delay: 4.5  },
+const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ01'
+
+const useScramble = (target, active) => {
+  const [display, setDisplay] = useState(target)
+  useEffect(() => {
+    if (!active) { setDisplay(target); return }
+    let step = 0
+    const steps = 10
+    const id = setInterval(() => {
+      const progress = step / steps
+      setDisplay(
+        target.split('').map((ch, i) => {
+          if (ch === '.' || i / target.length < progress) return ch
+          return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
+        }).join('')
+      )
+      if (++step > steps) clearInterval(id)
+    }, 55)
+    return () => clearInterval(id)
+  }, [active, target])
+  return display
+}
+
+const Counter = ({ to, delay = 0 }) => {
+  const [val, setVal] = useState(0)
+  useEffect(() => {
+    const t = setTimeout(() => {
+      let n = 0
+      const id = setInterval(() => { n++; setVal(n); if (n >= to) clearInterval(id) }, 60)
+      return () => clearInterval(id)
+    }, delay)
+    return () => clearTimeout(t)
+  }, [to, delay])
+  return String(val).padStart(2, '0')
+}
+
+const SKILLS = [
+  { label: 'React',        color: '#00FFCC' },
+  { label: 'Spring Boot',  color: '#39FF14' },
+  { label: 'Node.js',      color: '#00FFCC' },
+  { label: 'PostgreSQL',   color: '#39FF14' },
+  { label: 'Redis',        color: '#00FFCC' },
+  { label: 'MongoDB',      color: '#39FF14' },
 ]
+
+const CompiledCard = () => (
+  <div style={{ padding: '32px 28px 36px' }}>
+    <motion.div
+      initial={{ opacity: 0, y: -6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      style={{ marginBottom: '6px' }}
+    >
+      <span style={{
+        fontFamily: "'DM Sans', sans-serif", fontSize: '0.65rem',
+        color: '#39FF14', letterSpacing: '0.16em', textTransform: 'uppercase',
+      }}>
+        compiled output
+      </span>
+    </motion.div>
+
+    <motion.h3
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, delay: 0.08 }}
+      style={{
+        fontFamily: "'Clash Display', sans-serif", fontWeight: 700,
+        fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', color: '#ffffff',
+        letterSpacing: '-0.01em', lineHeight: 1.1, margin: '0 0 4px',
+      }}
+    >
+      Adebowale<br />
+      <span style={{ color: '#39FF14' }}>Adeniran</span>
+    </motion.h3>
+
+    <motion.p
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4, delay: 0.18 }}
+      style={{
+        fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem',
+        color: '#4b5563', letterSpacing: '0.08em', marginBottom: '28px',
+      }}
+    >
+      Full Stack Developer
+    </motion.p>
+
+    {/* Skills */}
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '32px' }}>
+      {SKILLS.map((s, i) => (
+        <motion.span
+          key={s.label}
+          initial={{ opacity: 0, scale: 0.7 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.35, delay: 0.28 + i * 0.07, ease: 'backOut' }}
+          style={{
+            padding: '5px 14px', borderRadius: '100px',
+            border: `1px solid ${s.color}35`,
+            background: `${s.color}0e`, color: s.color,
+            fontFamily: "'DM Sans', sans-serif", fontSize: '0.72rem',
+            fontWeight: 500, letterSpacing: '0.05em',
+            boxShadow: `0 0 10px ${s.color}18`,
+          }}
+        >
+          {s.label}
+        </motion.span>
+      ))}
+    </div>
+
+    {/* Stats */}
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.7 }}
+      style={{ display: 'flex', gap: '32px', marginBottom: '28px', alignItems: 'center' }}
+    >
+      <div>
+        <div style={{ fontFamily: "'Clash Display', sans-serif", fontWeight: 700, fontSize: '2rem', color: '#ffffff', lineHeight: 1 }}>
+          <Counter to={4} delay={700} />
+        </div>
+        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.68rem', color: '#4b5563', letterSpacing: '0.08em', marginTop: '3px' }}>years</div>
+      </div>
+      <div style={{ width: '1px', height: '36px', background: 'rgba(255,255,255,0.07)' }} />
+      <div>
+        <div style={{ fontFamily: "'Clash Display', sans-serif", fontWeight: 700, fontSize: '2rem', color: '#ffffff', lineHeight: 1 }}>
+          <Counter to={11} delay={800} />
+        </div>
+        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.68rem', color: '#4b5563', letterSpacing: '0.08em', marginTop: '3px' }}>projects</div>
+      </div>
+      <div style={{ width: '1px', height: '36px', background: 'rgba(255,255,255,0.07)' }} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <motion.div
+          animate={{ scale: [1, 1.6, 1], opacity: [1, 0.4, 1] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ width: 8, height: 8, borderRadius: '50%', background: '#39FF14', flexShrink: 0 }}
+        />
+        <div>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.75rem', color: '#39FF14', fontWeight: 600 }}>available</div>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.65rem', color: '#4b5563' }}>for hire</div>
+        </div>
+      </div>
+    </motion.div>
+
+    {/* Quote */}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, delay: 1.0 }}
+      style={{
+        borderLeft: '2px solid rgba(57,255,20,0.3)',
+        paddingLeft: '14px',
+      }}
+    >
+      <p style={{
+        fontFamily: "'DM Sans', sans-serif", fontSize: '0.82rem',
+        color: '#6b7280', fontStyle: 'italic', lineHeight: 1.7, margin: 0,
+      }}>
+        "Architecture first, code second."
+      </p>
+    </motion.div>
+  </div>
+)
 
 // ── Java Code Block ──
 const JavaBlock = () => {
-  const [runKey, setRunKey]         = useState(0)
-  const [showTerm, setShowTerm]     = useState(false)
+  const [compiled, setCompiled]   = useState(false)
+  const [scrambling, setScrambling] = useState(false)
+
+  const filename = useScramble(
+    compiled ? 'Debo.class' : 'Debo.java',
+    scrambling
+  )
 
   const handleRun = () => {
-    setRunKey((k) => k + 1)
-    setShowTerm(true)
+    setScrambling(true)
+    setTimeout(() => { setScrambling(false); setCompiled(true) }, 650)
   }
 
-  const handleReset = () => {
-    setShowTerm(false)
+  const handleSource = () => {
+    setScrambling(true)
+    setTimeout(() => { setScrambling(false); setCompiled(false) }, 650)
   }
 
   return (
@@ -62,42 +214,34 @@ const JavaBlock = () => {
           <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />
         ))}
         <span style={{
-          marginLeft: '8px', fontSize: '0.7rem', color: '#4b5563',
+          marginLeft: '8px', fontSize: '0.7rem',
+          color: scrambling ? '#39FF14' : '#4b5563',
           fontFamily: "'Courier New', monospace", letterSpacing: '0.06em',
-          flex: 1,
+          flex: 1, transition: 'color 0.2s',
         }}>
-          Debo.java
+          {filename}
         </span>
 
-        {/* Run / Reset button */}
         <button
-          onClick={showTerm ? handleReset : handleRun}
+          onClick={compiled ? handleSource : handleRun}
+          disabled={scrambling}
           style={{
             display: 'flex', alignItems: 'center', gap: '5px',
-            padding: '4px 12px',
-            borderRadius: '5px',
-            border: 'none',
-            cursor: 'pointer',
-            background: showTerm ? 'rgba(255,255,255,0.06)' : 'rgba(57,255,20,0.12)',
-            color: showTerm ? '#6b7280' : '#39FF14',
+            padding: '4px 12px', borderRadius: '5px', border: 'none',
+            cursor: scrambling ? 'default' : 'pointer',
+            background: compiled ? 'rgba(255,255,255,0.06)' : 'rgba(57,255,20,0.12)',
+            color: compiled ? '#9ca3af' : '#39FF14',
             fontFamily: "'DM Sans', sans-serif",
-            fontSize: '0.7rem',
-            fontWeight: 600,
-            letterSpacing: '0.05em',
-            transition: 'all 0.2s',
+            fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.05em',
+            transition: 'all 0.2s', opacity: scrambling ? 0.4 : 1,
           }}
         >
-          {showTerm ? (
-            <>
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                <path d="M5 1a4 4 0 1 1-2.83 1.17M5 1V4M5 1 3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              Reset
-            </>
+          {compiled ? (
+            <><span style={{ fontSize: '0.85rem' }}>{'{ }'}</span> Source</>
           ) : (
             <>
               <svg width="9" height="10" viewBox="0 0 9 10" fill="currentColor">
-                <path d="M1 1.5l7 3.5-7 3.5V1.5z"/>
+                <path d="M1 1.5l7 3.5-7 3.5V1.5z" />
               </svg>
               Run
             </>
@@ -105,86 +249,67 @@ const JavaBlock = () => {
         </button>
       </div>
 
-      {/* Code */}
-      <div style={{
-        padding: '22px 28px',
-        fontFamily: "'Courier New', monospace",
-        fontSize: '0.78rem',
-        lineHeight: 2,
-        overflowX: 'auto',
-      }}>
-        {[
-          <><CMT c="// Debo.java" /></>,
-          <></>,
-          <><KW c="public" /> <KW c="class" /> <CLS c="Debo" /> <KW c="extends" /> <CLS c="FullStackDeveloper" /> <PUN c="{" /></>,
-          <></>,
-          <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="name" />      <PUN c="=" /> <PUN c='"'/><STR c="Adebowale Adeniran" /><PUN c='"' /><PUN c=";" /></>,
-          <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="location" />  <PUN c="=" /> <PUN c='"'/><STR c="Nigeria" /><PUN c='"' /><PUN c=";" /></>,
-          <>{sp()}<KW c="private" /> <KW c="int" />     <FN c="years" />      <PUN c="=" /> <NUM c="4" /><PUN c=";" /></>,
-          <>{sp()}<KW c="private" /> <KW c="boolean" />  <FN c="available" /> <PUN c="=" /> <NUM c="true" /><PUN c=";" /></>,
-          <></>,
-          <>{sp()}<ANN c="@Override" /></>,
-          <>{sp()}<KW c="public" /> <CLS c="String" /><PUN c="[]" /> <FN c="stack" /><PUN c="() {" /></>,
-          <>{sp(2)}<KW c="return" /> <KW c="new" /> <CLS c="String" /><PUN c="[]{ " /><PUN c='"'/><STR c="React" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="Spring Boot" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="Node.js" /><PUN c='"' /><PUN c="," /></>,
-          <>{sp(3)}<PUN c='"'/><STR c="PostgreSQL" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="Redis" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="MongoDB" /><PUN c='"' /> <PUN c="};" /></>,
-          <>{sp()}<PUN c="}" /></>,
-          <></>,
-          <>{sp()}<KW c="public" /> <CLS c="String" /> <FN c="philosophy" /><PUN c="() {" /></>,
-          <>{sp(2)}<KW c="return" /> <PUN c='"'/><STR c="Architecture first, code second." /><PUN c='"' /><PUN c=";" /></>,
-          <>{sp()}<PUN c="}" /></>,
-          <></>,
-          <>{sp()}<KW c="public" /> <KW c="static" /> <KW c="void" /> <FN c="main" /><PUN c="(" /><CLS c="String" /><PUN c="[]" /> <FN c="args" /><PUN c=") {" /></>,
-          <>{sp(2)}<CLS c="Debo" /> <FN c="dev" /> <PUN c="=" /> <KW c="new" /> <CLS c="Debo" /><PUN c="();" /></>,
-          <>{sp(2)}<FN c="dev" /><PUN c="." /><FN c="stack" /><PUN c="();" /></>,
-          <>{sp(2)}<FN c="dev" /><PUN c="." /><FN c="philosophy" /><PUN c="();" /></>,
-          <>{sp()}<PUN c="}" /></>,
-          <><PUN c="}" /></>,
-        ].map((line, i) => (
+      {/* Animated content swap */}
+      <AnimatePresence mode="wait">
+        {compiled ? (
           <motion.div
-            key={i}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: i * 0.03, duration: 0.15 }}
-          >
-            {line}
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Terminal output */}
-      <AnimatePresence>
-        {showTerm && (
-          <motion.div
-            key={runKey}
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+            key="compiled"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.35, ease: 'easeInOut' }}
-            style={{ overflow: 'hidden' }}
+          >
+            <CompiledCard />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="source"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
           >
             <div style={{
-              borderTop: '1px solid rgba(255,255,255,0.05)',
-              background: '#080c08',
-              padding: '16px 28px 20px',
+              padding: '22px 28px',
               fontFamily: "'Courier New', monospace",
-              fontSize: '0.74rem',
-              lineHeight: 1.95,
+              fontSize: '0.78rem',
+              lineHeight: 2,
+              overflowX: 'auto',
             }}>
-              <div style={{
-                fontSize: '0.62rem', color: '#374151', letterSpacing: '0.1em',
-                marginBottom: '10px', textTransform: 'uppercase',
-              }}>
-                Terminal
-              </div>
-              {TERM_LINES.map((line, i) => (
+              {[
+                <><CMT c="// Debo.java" /></>,
+                <></>,
+                <><KW c="public" /> <KW c="class" /> <CLS c="Debo" /> <KW c="extends" /> <CLS c="FullStackDeveloper" /> <PUN c="{" /></>,
+                <></>,
+                <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="name" />      <PUN c="=" /> <PUN c='"'/><STR c="Adebowale Adeniran" /><PUN c='"' /><PUN c=";" /></>,
+                <>{sp()}<KW c="private" /> <CLS c="String" />  <FN c="location" />  <PUN c="=" /> <PUN c='"'/><STR c="Nigeria" /><PUN c='"' /><PUN c=";" /></>,
+                <>{sp()}<KW c="private" /> <KW c="int" />      <FN c="years" />      <PUN c="=" /> <NUM c="4" /><PUN c=";" /></>,
+                <>{sp()}<KW c="private" /> <KW c="boolean" />  <FN c="available" /> <PUN c="=" /> <NUM c="true" /><PUN c=";" /></>,
+                <></>,
+                <>{sp()}<ANN c="@Override" /></>,
+                <>{sp()}<KW c="public" /> <CLS c="String" /><PUN c="[]" /> <FN c="stack" /><PUN c="() {" /></>,
+                <>{sp(2)}<KW c="return" /> <KW c="new" /> <CLS c="String" /><PUN c="[]{ " /><PUN c='"'/><STR c="React" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="Spring Boot" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="Node.js" /><PUN c='"' /><PUN c="," /></>,
+                <>{sp(3)}<PUN c='"'/><STR c="PostgreSQL" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="Redis" /><PUN c='"' /><PUN c="," /> <PUN c='"'/><STR c="MongoDB" /><PUN c='"' /> <PUN c="};" /></>,
+                <>{sp()}<PUN c="}" /></>,
+                <></>,
+                <>{sp()}<KW c="public" /> <CLS c="String" /> <FN c="philosophy" /><PUN c="() {" /></>,
+                <>{sp(2)}<KW c="return" /> <PUN c='"'/><STR c="Architecture first, code second." /><PUN c='"' /><PUN c=";" /></>,
+                <>{sp()}<PUN c="}" /></>,
+                <></>,
+                <>{sp()}<KW c="public" /> <KW c="static" /> <KW c="void" /> <FN c="main" /><PUN c="(" /><CLS c="String" /><PUN c="[]" /> <FN c="args" /><PUN c=") {" /></>,
+                <>{sp(2)}<CLS c="Debo" /> <FN c="dev" /> <PUN c="=" /> <KW c="new" /> <CLS c="Debo" /><PUN c="();" /></>,
+                <>{sp(2)}<FN c="dev" /><PUN c="." /><FN c="stack" /><PUN c="();" /></>,
+                <>{sp(2)}<FN c="dev" /><PUN c="." /><FN c="philosophy" /><PUN c="();" /></>,
+                <>{sp()}<PUN c="}" /></>,
+                <><PUN c="}" /></>,
+              ].map((line, i) => (
                 <motion.div
-                  key={`${runKey}-${i}`}
+                  key={i}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: line.delay, duration: 0.2 }}
-                  style={{ color: line.color || 'transparent', minHeight: '1.95em' }}
+                  transition={{ delay: i * 0.03, duration: 0.15 }}
                 >
-                  {line.text}
+                  {line}
                 </motion.div>
               ))}
             </div>
