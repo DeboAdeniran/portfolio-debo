@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import './index.css'
 import Logo from './components/logo/Logo'
+import LoaderScreen from './components/loader/LoaderScreen'
 import HeroSection from './components/hero/HeroSection'
 import AboutSection from './components/about/AboutSection'
 import SkillsSection from './components/skills/SkillsSection'
@@ -236,10 +238,38 @@ const AppShell = () => (
   </div>
 )
 
-const App = () => (
-  <BrowserRouter>
-    <AppShell />
-  </BrowserRouter>
-)
+const App = () => {
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    let minMet = false
+    let loadFired = false
+    const tryDone = () => { if (minMet && loadFired) setLoaded(true) }
+
+    const minTimer = setTimeout(() => { minMet = true; tryDone() }, 1200)
+
+    if (document.readyState === 'complete') {
+      loadFired = true
+    } else {
+      const handleLoad = () => { loadFired = true; tryDone() }
+      window.addEventListener('load', handleLoad)
+      return () => {
+        clearTimeout(minTimer)
+        window.removeEventListener('load', handleLoad)
+      }
+    }
+
+    return () => clearTimeout(minTimer)
+  }, [])
+
+  return (
+    <>
+      <AnimatePresence>{!loaded && <LoaderScreen />}</AnimatePresence>
+      <BrowserRouter>
+        <AppShell />
+      </BrowserRouter>
+    </>
+  )
+}
 
 export default App
