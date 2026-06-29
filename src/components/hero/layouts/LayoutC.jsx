@@ -17,6 +17,7 @@ const LayoutC = () => {
 
   return (
     <section
+      id="home"
       className="relative min-h-screen flex items-center justify-center"
       style={{ overflowX: "hidden" }}
     >

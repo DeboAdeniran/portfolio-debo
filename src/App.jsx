@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import './index.css'
 import Logo from './components/logo/Logo'
@@ -12,9 +12,10 @@ import ContactSection from './components/contact/ContactSection'
 import Footer from './components/footer/Footer'
 import TermsPage from './pages/TermsPage'
 import PrivacyPage from './pages/PrivacyPage'
+import PortfolioPage from './pages/PortfolioPage'
 import useIsMobile from './hooks/useIsMobile'
 
-const NAV_ITEMS = ['home', 'about', 'skills', 'portfolio', 'articles']
+const NAV_ITEMS = ['home', 'about', 'skills', 'experience', 'portfolio']
 
 const NAV_LINK_STYLE = {
   textDecoration: 'none',
@@ -28,11 +29,24 @@ const Navbar = () => {
   const isMobile = useIsMobile()
   const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const activeItem = pathname === '/portfolio' ? 'portfolio' : null
 
-  const goHome = (hash) => {
+  const goHome = (item) => {
+    if (item === 'portfolio') {
+      navigate('/portfolio')
+      setMenuOpen(false)
+      return
+    }
+    if (item === 'home') {
+      navigate('/')
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50)
+      setMenuOpen(false)
+      return
+    }
     navigate('/')
     setTimeout(() => {
-      const el = document.getElementById(hash.replace('#', ''))
+      const el = document.getElementById(item)
       if (el) el.scrollIntoView({ behavior: 'smooth' })
     }, 50)
     setMenuOpen(false)
@@ -76,12 +90,12 @@ const Navbar = () => {
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  color: item === 'home' ? '#f0f0f0' : '#6b7280',
+                  color: item === activeItem ? '#f0f0f0' : '#6b7280',
                   padding: 0,
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = '#f0f0f0')}
                 onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = item === 'home' ? '#f0f0f0' : '#6b7280')
+                  (e.currentTarget.style.color = item === activeItem ? '#f0f0f0' : '#6b7280')
                 }
               >
                 {item}
@@ -207,19 +221,24 @@ const HomePage = () => (
   </main>
 )
 
+const AppShell = () => (
+  <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Navbar />
+    <div style={{ flex: 1 }}>
+      <Routes>
+        <Route path="/"               element={<HomePage />} />
+        <Route path="/portfolio"      element={<PortfolioPage />} />
+        <Route path="/terms"          element={<TermsPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPage />} />
+      </Routes>
+    </div>
+    <Footer />
+  </div>
+)
+
 const App = () => (
   <BrowserRouter>
-    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Navbar />
-      <div style={{ flex: 1 }}>
-        <Routes>
-          <Route path="/"               element={<HomePage />} />
-          <Route path="/terms"          element={<TermsPage />} />
-          <Route path="/privacy-policy" element={<PrivacyPage />} />
-        </Routes>
-      </div>
-      <Footer />
-    </div>
+    <AppShell />
   </BrowserRouter>
 )
 
