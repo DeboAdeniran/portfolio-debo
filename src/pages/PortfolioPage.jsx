@@ -7,6 +7,15 @@ import ContactSection from '../components/contact/ContactSection'
 const PROJECTS = [
   {
     id: 1,
+    name: 'QuizGenie',
+    type: 'AI / EdTech',
+    stack: 'React · Node.js · Python',
+    description: 'AI-powered quiz generation platform that automatically produces assessments from source material using a Python AI component, with a full frontend and backend.',
+    link: 'https://quiz-genie-ten.vercel.app',
+    isPrivate: false,
+  },
+  {
+    id: 2,
     name: 'DermAI',
     type: 'AI / Healthcare',
     stack: 'React · Node.js · AI',
@@ -15,7 +24,7 @@ const PROJECTS = [
     isPrivate: false,
   },
   {
-    id: 2,
+    id: 3,
     name: 'Nahedris Foods',
     type: 'Full-Stack / E-commerce',
     stack: 'React · Spring Boot · Java',
@@ -24,7 +33,7 @@ const PROJECTS = [
     isPrivate: false,
   },
   {
-    id: 3,
+    id: 4,
     name: 'Haulo',
     type: 'Logistics / Mobile',
     stack: 'React Native · Node.js · Spring Boot · AWS',
@@ -33,7 +42,7 @@ const PROJECTS = [
     isPrivate: true,
   },
   {
-    id: 4,
+    id: 5,
     name: 'Squad Hackathon',
     type: 'Backend / Fintech',
     stack: 'Java · Spring Boot',
@@ -42,21 +51,12 @@ const PROJECTS = [
     isPrivate: true,
   },
   {
-    id: 5,
+    id: 6,
     name: 'ClinicalAI',
     type: 'AI / Healthcare',
     stack: 'React · Node.js · Python',
     description: 'Clinical AI system with a patient-facing frontend, RESTful backend, and a machine learning layer for intelligent clinical data processing and decision support.',
     link: 'https://clinical-ai-frontend-dun.vercel.app',
-    isPrivate: false,
-  },
-  {
-    id: 6,
-    name: 'QuizGenie',
-    type: 'AI / EdTech',
-    stack: 'React · Node.js · Python',
-    description: 'AI-powered quiz generation platform that automatically produces assessments from source material using a Python AI component, with a full frontend and backend.',
-    link: 'https://quiz-genie-ten.vercel.app',
     isPrivate: false,
   },
   {
